@@ -31,6 +31,7 @@ jobs:
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH .
         echo "::set-output name=commitHash::$(git rev-parse HEAD)"
+        echo "::set-output name=date::$(date +'%Y-%m-%d-%H%M')"
 
     - name: Compare Commit Hash
       id: cacheHash
@@ -49,7 +50,7 @@ jobs:
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.ACTIONS_TRIGGER_PAT }}
-        event-type: coolsnowwolf源码更新 $(date +'%Y.%m.%d.%H.%M')
+        event-type: coolsnowwolf源码更新${{ steps.getHash.outputs.date }}
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
